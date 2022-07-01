@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 
 export default function AddTodo({ addTodo }) {
   const [value, setValue] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   function handleChange(e) {
     const inputValue = e.target.value;
@@ -10,31 +12,42 @@ export default function AddTodo({ addTodo }) {
 
   function handleKeyDown(e) {
     if (e.key === 'Enter' && value.length) {
-      addTodo(value);
-      setValue('');
+      createTodo();
     }
   }
 
-  async function handleClick() {
+  async function createTodo() {
+    try {
+      setLoading(true);
+      setError(null);
+      const reponse = await fetch('https://restapi.fr/api/todo', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          content: value,
+          edit: false,
+          done: false,
+        }),
+      });
+      if (reponse.ok) {
+        const todo = await reponse.json();
+        addTodo(todo);
+        setValue('');
+      } else {
+        setError('Oops, une erreur');
+      }
+    } catch (e) {
+      setError('Oops, une erreur');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function handleClick() {
     if (value.length) {
-      try {
-        const reponse = await fetch('https://restapi.fr/api/todo', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            content: value,
-            edit: false,
-            done: false,
-          }),
-        });
-        if (reponse.ok) {
-          const todo = await reponse.json();
-          addTodo(todo);
-          setValue('');
-        }
-      } catch (e) {}
+      createTodo();
     }
   }
 
@@ -49,7 +62,7 @@ export default function AddTodo({ addTodo }) {
         placeholder="Ajouter une tâche"
       />
       <button onClick={handleClick} className="btn btn-primary">
-        Ajouter
+        {loading ? 'Chargement' : 'Ajouter'}
       </button>
     </div>
   );
