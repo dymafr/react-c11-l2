@@ -15,10 +15,26 @@ export default function AddTodo({ addTodo }) {
     }
   }
 
-  function handleClick() {
+  async function handleClick() {
     if (value.length) {
-      addTodo(value);
-      setValue('');
+      try {
+        const reponse = await fetch('https://restapi.fr/api/todo', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            content: value,
+            edit: false,
+            done: false,
+          }),
+        });
+        if (reponse.ok) {
+          const todo = await reponse.json();
+          addTodo(todo);
+          setValue('');
+        }
+      } catch (e) {}
     }
   }
 

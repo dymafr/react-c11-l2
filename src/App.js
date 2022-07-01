@@ -5,25 +5,19 @@ import AddTodo from './components/AddTodo';
 function App() {
   const [todoList, setTodoList] = useState([]);
 
-  function addTodo(content) {
-    const todo = {
-      id: crypto.randomUUID(),
-      done: false,
-      edit: false,
-      selected: false,
-      content,
-    };
+  function addTodo(todo) {
+    console.log(todo);
     setTodoList([...todoList, todo]);
   }
 
   function deleteTodo(id) {
-    setTodoList(todoList.filter((todo) => todo.id !== id));
+    setTodoList(todoList.filter((todo) => todo._id !== id));
   }
 
   function toggleTodo(id) {
     setTodoList(
       todoList.map((todo) =>
-        todo.id === id ? { ...todo, done: !todo.done } : todo
+        todo._id === id ? { ...todo, done: !todo.done } : todo
       )
     );
   }
@@ -31,7 +25,7 @@ function App() {
   function toggleTodoEdit(id) {
     setTodoList(
       todoList.map((todo) =>
-        todo.id === id ? { ...todo, edit: !todo.edit } : todo
+        todo._id === id ? { ...todo, edit: !todo.edit } : todo
       )
     );
   }
@@ -39,7 +33,7 @@ function App() {
   function editTodo(id, content) {
     setTodoList(
       todoList.map((todo) =>
-        todo.id === id ? { ...todo, edit: false, content } : todo
+        todo._id === id ? { ...todo, edit: false, content } : todo
       )
     );
   }
@@ -47,7 +41,7 @@ function App() {
   function selectTodo(id) {
     setTodoList(
       todoList.map((todo) =>
-        todo.id === id
+        todo._id === id
           ? { ...todo, selected: !todo.selected }
           : { ...todo, selected: false }
       )

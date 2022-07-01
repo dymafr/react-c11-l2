@@ -15,19 +15,19 @@ export default function TodoList({
       {todoList.map((todo) =>
         todo.edit ? (
           <EditTodo
-            key={todo.id}
+            key={todo._id}
             todo={todo}
-            editTodo={(content) => editTodo(todo.id, content)}
-            cancelEditTodo={() => toggleTodoEdit(todo.id)}
+            editTodo={(content) => editTodo(todo._id, content)}
+            cancelEditTodo={() => toggleTodoEdit(todo._id)}
           />
         ) : (
           <TodoItem
-            key={todo.id}
+            key={todo._id}
             todo={todo}
-            deleteTodo={() => deleteTodo(todo.id)}
-            toggleTodo={() => toggleTodo(todo.id)}
-            editTodo={() => toggleTodoEdit(todo.id)}
-            selectTodo={() => selectTodo(todo.id)}
+            deleteTodo={() => deleteTodo(todo._id)}
+            toggleTodo={() => toggleTodo(todo._id)}
+            editTodo={() => toggleTodoEdit(todo._id)}
+            selectTodo={() => selectTodo(todo._id)}
           />
         )
       )}
